@@ -56,22 +56,16 @@ function onSelectBreed(e) {
   distResource = 'images/search?';
   const searchParams = new URLSearchParams({
     breed_ids: e.target.value,
-    limit: 3,
+    limit: 2,
     size: 'small',
   });
   url = URL + distResource + searchParams;
-  isHidden([refs.info]);
+  isHidden([refs.info, refs.error]);
   isVisually([refs.loader]);
   fetchCatByBreed(url).then(addMarkupInfo).catch(isError);
 }
 
 function addMarkupInfo(arrInfo) {
-  if (!arrInfo || arrInfo.length === 0) {
-    isHidden([refs.loader, refs.info]);
-    isVisually([refs.error]);
-    Notify.failure(refs.error.textContent);
-    return;
-  }
   const markUp =
     arrInfo
       .map(
@@ -112,7 +106,7 @@ function isHidden(arrEl) {
 }
 
 function isError(error) {
-  isHidden([refs.info, refs.loader, refs.select]);
+  isHidden([refs.info, refs.loader]);
   isVisually([refs.error]);
   Notify.failure(refs.error.textContent);
   console.error('Error status: ', error);
